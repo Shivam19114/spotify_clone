@@ -71,7 +71,7 @@ async function getSongs(folder) {
             <div class="info">
                 <div>${song.replaceAll("%20", " ")}</div>
                 <br>
-                <div>${folder.replace("songs/","")} song</div>
+                <div>${folder.replace("songs/", "")} song</div>
             </div>
             <div class="playnow">
                 <span>Play Now</span>
@@ -210,6 +210,19 @@ async function main() {
         document.querySelector(".circle").style.left =
             (currentSong.currentTime / currentSong.duration) * 100 + "%";
     });
+
+    // Auto play next song when current song ends
+    currentSong.addEventListener("ended", () => {
+        let index = songs.indexOf(currentSong.src.split("/").pop());
+
+        if ((index + 1) < songs.length) {
+            playMusic(songs[index + 1]);
+        } else {
+            // If last song ends → start again from first
+            playMusic(songs[0]);
+        }
+    });
+
 
     // Seek functionality (jump to position when user clicks progress bar)
     document.querySelector(".seekbar").addEventListener("click", e => {
